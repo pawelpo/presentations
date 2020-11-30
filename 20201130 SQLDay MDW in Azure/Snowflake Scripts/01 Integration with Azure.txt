@@ -1,0 +1,51 @@
+-------------------------------------------------
+-- Snowflake & Azure Active Directory integration
+-------------------------------------------------
+
+-- Documentation: https://docs.microsoft.com/en-us/azure/active-directory/saas-apps/snowflake-tutorial
+
+-- Create a role responsible for managing Azure AD identities
+
+USE ROLE ACCOUNTADMIN;
+
+CREATE OR REPLACE ROLE AAD_PROVISIONER;
+GRANT CREATE USER ON ACCOUNT TO AAD_PROVISIONER;
+GRANT CREATE ROLE ON ACCOUNT TO AAD_PROVISIONER;
+GRANT ROLE AAD_PROVISIONER TO ROLE ACCOUNTADMIN;
+
+CREATE OR REPLACE SECURITY INTEGRATION AAD_PROVISIONING TYPE=SCIM SCIM_CLIENT=AZURE RUN_AS_ROLE='AAD_PROVISIONER';
+
+SELECT SYSTEM$GENERATE_SCIM_ACCESS_TOKEN('AAD_PROVISIONING');
+
+-- Register identity provider
+
+USE ROLE ACCOUNTADMIN;
+
+ALTER ACCOUNT SET SAML_IDENTITY_PROVIDER = '{
+  "certificate": "<paste certificate here>",
+  "ssoUrl": "https://login.microsoftonline.com/<tenant ID>/saml2",
+  "type"  : "custom",
+  "label" : "AzureAD"
+  }';
+
+-- Enable logon page with SSO
+
+ALTER ACCOUNT SET SSO_LOGIN_PAGE=TRUE;
+
+----------------------------------
+-- Power BI integration
+----------------------------------
+
+-- Documentation: https://docs.snowflake.net/manuals/user-guide/oauth-powerbi.html
+
+USE ROLE ACCOUNTADMIN;
+
+CREATE OR REPLACE SECURITY INTEGRATION POWERBI
+    TYPE = EXTERNAL_OAUTH
+    ENABLED = TRUE
+    EXTERNAL_OAUTH_TYPE = AZURE
+    EXTERNAL_OAUTH_ISSUER = 'https://sts.windows.net/<tenant ID>/'
+    EXTERNAL_OAUTH_JWS_KEYS_URL = 'https://login.windows.net/common/discovery/keys'
+    EXTERNAL_OAUTH_AUDIENCE_LIST = ('https://analysis.windows.net/powerbi/connector/Snowflake')
+    EXTERNAL_OAUTH_TOKEN_USER_MAPPING_CLAIM = 'upn'
+    EXTERNAL_OAUTH_SNOWFLAKE_USER_MAPPING_ATTRIBUTE = 'login_name';

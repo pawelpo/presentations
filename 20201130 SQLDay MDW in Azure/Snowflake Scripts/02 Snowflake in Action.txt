@@ -1,0 +1,222 @@
+USE DEMO_DB.PUBLIC;
+
+--------------
+-- Clean-up
+--------------
+
+USE ROLE SYSADMIN;
+
+DROP DATABASE IF EXISTS DEMO_DB_DEV;
+DROP STAGE IF EXISTS DEMO_STAGE;
+DROP TABLE IF EXISTS SALES_BY_DAY;
+DROP TABLE IF EXISTS GA_CLICKS_JSON;
+DROP VIEW IF EXISTS VW_GA_CLICKS;
+DROP VIEW IF EXISTS VW_SALES;
+DROP FILE FORMAT IF EXISTS DEMO_FORMAT_CSV;
+DROP FILE FORMAT IF EXISTS DEMO_FORMAT_JSON;
+
+-----------------------------
+-- Warehouses
+-----------------------------
+
+-- Performance (size matters)
+
+USE WAREHOUSE ANALYTICS_WH;
+
+ALTER WAREHOUSE ANALYTICS_WH RESUME;
+
+ALTER SESSION SET USE_CACHED_RESULT = FALSE;
+
+SELECT 
+    DATE_TRUNC('YEAR', O_ORDERDATE) AS YEAR,
+    SUM(O_TOTALPRICE) AS REVENUE
+FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF1000.ORDERS
+GROUP BY YEAR
+ORDER BY YEAR;
+
+ALTER WAREHOUSE ANALYTICS_WH SUSPEND;
+ALTER WAREHOUSE ANALYTICS_WH SET WAREHOUSE_SIZE = 'X-LARGE';
+ALTER WAREHOUSE ANALYTICS_WH RESUME;
+
+SELECT 
+    DATE_TRUNC('YEAR', O_ORDERDATE) AS YEAR,
+    SUM(O_TOTALPRICE) AS REVENUE
+FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF1000.ORDERS
+GROUP BY YEAR
+ORDER BY YEAR;
+
+ALTER WAREHOUSE ANALYTICS_WH SUSPEND;
+ALTER WAREHOUSE ANALYTICS_WH SET WAREHOUSE_SIZE = 'X-SMALL';
+ALTER WAREHOUSE ANALYTICS_WH RESUME;
+
+ALTER SESSION SET USE_CACHED_RESULT = TRUE;
+
+-- Scale-out for concurrency
+-- *** Run test ***
+
+ALTER WAREHOUSE ANALYTICS_WH SUSPEND;
+
+------------------------------------------------------
+-- Azure Storage Account integration
+-- Benefit: no need to use account key or SAS
+------------------------------------------------------
+
+USE ROLE ACCOUNTADMIN;
+
+CREATE OR REPLACE STORAGE INTEGRATION DEMO_STOR_INT
+    TYPE = EXTERNAL_STAGE
+    STORAGE_PROVIDER = AZURE
+    ENABLED = TRUE
+    AZURE_TENANT_ID = '<tenant ID (GUID)>'
+    STORAGE_ALLOWED_LOCATIONS = ('*');
+    
+GRANT USAGE ON INTEGRATION DEMO_STOR_INT TO SYSADMIN;
+    
+DESCRIBE STORAGE INTEGRATION DEMO_STOR_INT;
+
+-------------------------------------------
+-- Load data from Azure Storage Account
+-------------------------------------------
+ 
+USE ROLE SYSADMIN;
+
+USE WAREHOUSE ETL_WH;
+
+USE SCHEMA DEMO_DB.PUBLIC;
+
+-- Create external stage
+
+SHOW STAGES;
+
+CREATE STAGE DEMO_STAGE 
+    STORAGE_INTEGRATION = DEMO_STOR_INT
+    URL = 'azure://<your_storage_account>.blob.core.windows.net/<your_data_lake_container>';
+    
+LIST @DEMO_STAGE/sales_by_day;
+
+-- Create table
+
+CREATE OR REPLACE TABLE SALES_BY_DAY (
+    INVOICE_NO STRING NULL,
+    STOCK_CODE STRING NULL,
+    DESCRIPTION STRING NULL,
+    QUANTITY INT NULL,
+    INVOICE_DATE DATETIME NULL,
+    UNITPRICE NUMBER NULL,
+    CUSTOMER STRING NULL,
+    COUNTRY STRING NULL
+);
+
+-- *** Create file format ***
+
+-- Preview data
+
+SELECT T.$1, T.$2, T.$3, T.$4, T.$5, T.$6, T.$7, T.$8 
+FROM '@DEMO_STAGE/sales_by_day' (FILE_FORMAT => DEMO_FORMAT_CSV) T LIMIT 10;
+
+-- Load data
+
+COPY INTO SALES_BY_DAY
+    FROM '@DEMO_STAGE/sales_by_day/'
+    FILE_FORMAT = (FORMAT_NAME = 'DEMO_FORMAT_CSV')
+    ON_ERROR = CONTINUE;
+    
+SELECT * FROM TABLE(VALIDATE(SALES_BY_DAY, job_id => '_last'));
+
+SELECT COUNT(*) FROM SALES_BY_DAY;
+
+-- Analyze data
+
+SELECT 
+    COUNTRY, 
+    DATE_TRUNC('MONTH', INVOICE_DATE) AS MONTH, 
+    COUNT(DISTINCT INVOICE_NO) AS INVOICE_COUNT
+FROM SALES_BY_DAY
+GROUP BY COUNTRY, MONTH
+ORDER BY COUNTRY, MONTH;
+
+---------------------------------------
+-- Load semi-structural data
+---------------------------------------
+
+-- Create table
+
+CREATE OR REPLACE TABLE GA_CLICKS_JSON (CLICKS VARIANT NOT NULL);
+
+-- *** DEMO_FORMAT_JSON ***
+-- *** Load the file manually ***
+
+SELECT * FROM GA_CLICKS_JSON LIMIT 10;
+
+WITH CTE AS (
+  SELECT 
+    DATE(GA.CLICKS:date::string, 'YYYYMMDD') AS DATE,
+    h.value:hour::integer AS HOUR 
+  FROM 
+    GA_CLICKS_JSON GA,
+    LATERAL FLATTEN (input => GA.CLICKS:hits) h
+)
+SELECT DATE, HOUR, COUNT(*) AS HITS
+FROM CTE
+GROUP BY DATE, HOUR;
+
+--------------
+-- Time Travel
+--------------
+
+TRUNCATE TABLE SALES_BY_DAY;
+
+SELECT * FROM SALES_BY_DAY LIMIT 10;
+
+SELECT * FROM SALES_BY_DAY AT (OFFSET => -60*2) LIMIT 10;
+
+INSERT INTO SALES_BY_DAY SELECT * FROM SALES_BY_DAY AT (OFFSET => -60*2);
+
+DROP TABLE IF EXISTS SALES_BY_DAY;
+
+SELECT * FROM VW_SALES LIMIT 10;
+
+UNDROP TABLE SALES_BY_DAY;
+
+SELECT * FROM VW_SALES LIMIT 10;
+
+----------
+-- Cloning
+----------
+
+CREATE OR REPLACE DATABASE DEMO_DB_DEV CLONE DEMO_DB;
+
+SELECT * FROM DEMO_DB_DEV.PUBLIC.SALES_BY_DAY LIMIT 10;
+
+----------------------
+-- Stored Procedure
+----------------------
+
+CREATE OR REPLACE PROCEDURE USP_GET_DDL_TABLES()
+RETURNS STRING
+LANGUAGE JAVASCRIPT
+AS
+$$
+    var stmt = snowflake.createStatement({sqlText: `select 'PUBLIC' || '.' || table_name from information_schema.tables where table_schema = 'PUBLIC'`})
+    var tables = stmt.execute();
+    
+    tables.next()
+    var table = tables.getColumnValue(1);
+    var stmt = "select GET_DDL('TABLE', '" + table + "');"
+    var res = snowflake.createStatement({sqlText: stmt}).execute();
+    res.next();
+    var result = res.getColumnValue(1);
+    
+    while(tables.next()) {
+        table = tables.getColumnValue(1);
+        stmt = "select GET_DDL('TABLE', '" + table + "');"
+        res = snowflake.createStatement({sqlText: stmt}).execute();
+        res.next();
+        result += "\n\n" + res.getColumnValue(1);
+    }
+    
+    return result;
+$$;
+
+CALL USP_GET_DDL_TABLES();
+
