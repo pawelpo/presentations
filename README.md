@@ -1,6 +1,7 @@
 # Presentations
 This repository contains resources created for my presentations at user groups and events.
 
+* 2022-07-28 - Azure Data Engineering Bootcamp (online), ["Modern Data Warehouse Using Azure Synapse Analytics"](https://github.com/pawelpo/presentations/blob/master/20220728%20Azure%20Data%20Engineering%20Bootcamp/Modern%20Data%20Warehouse%20using%20Synapse.pdf)
 * 2022-07-09 - Data Toboggan Cool Runnings 2022 (online), ["What's New and Cool in Azure Synapse Analytics"](https://github.com/pawelpo/presentations/blob/master/20220709%20Data%20Toboggan%20Cool%20Runnings%202022/Whats%20New%20and%20Cool%20in%20Azure%20Synapse%20Analytics.pdf)
 * 2022-05-10 - SQLDay 2022 (hybrid), ["KEYNOTE - The Evolution of Data Professional
 How NOT to Become a Dinosaur in the Cloud Age"](https://github.com/pawelpo/presentations/tree/master/20220510%20SQLDay%20Keynote)([watch the recording at Data Community Poland YouTube channel](https://www.youtube.com/watch?v=20AlPv5jYtw&t=3485s))
