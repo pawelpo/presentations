@@ -1,7 +1,7 @@
 # Presentations
 This repository contains resources created for my presentations at user groups and events.
 
-* 2023-03-18 - SQLBits 2023 (Wales), ["Azure Data Explorer - a Torch in the Dungeon of Observational Analytics"](20230318 SQLBits 2023/Azure Data Explorer - a Torch in the Dungeon of Observational Analytics.pdf)
+* 2023-03-18 - SQLBits 2023 (Wales), ["Azure Data Explorer - a Torch in the Dungeon of Observational Analytics"]([20230318 SQLBits 2023/Azure Data Explorer - a Torch in the Dungeon of Observational Analytics.pdf](https://github.com/pawelpo/presentations/blob/master/20230318%20SQLBits%202023/Azure%20Data%20Explorer%20-%20a%20Torch%20in%20the%20Dungeon%20of%20Observational%20Analytics.pdf)
 * 2023-01-28 - Data Toboggan Winter Edition 2023 (online), ["What's New and Cool in Azure Synapse Analytics"](https://github.com/pawelpo/presentations/blob/master/20230128%20Data%20Toboggan%20Winter%20Edition%202023/Whats%20New%20and%20Cool%20in%20Azure%20Synapse%20Analytics%20-%20Winter%202023.pdf)
 * 2022-08-23 - Dynamics User Group Norge (online), ["Introduction to Analytics with Azure Synapse and Power BI"](https://github.com/pawelpo/presentations/blob/master/20220823%20DYNUG%20Norge/20220823%20Introduction%20to%20Analytics%20with%20Azure%20Synapse%20and%20Power%20BI.pdf)
 * 2022-07-28 - Azure Data Engineering Bootcamp (online), ["Modern Data Warehouse Using Azure Synapse Analytics"](https://github.com/pawelpo/presentations/blob/master/20220728%20Azure%20Data%20Engineering%20Bootcamp/Modern%20Data%20Warehouse%20using%20Synapse.pdf)
