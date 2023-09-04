@@ -1,6 +1,7 @@
 # Presentations
 This repository contains resources created for my presentations at user groups and events.
 
+* 2023-08-30 - Microsoft Fabric and Synapse Data Engineering Explorers - User Group Norway (online), ["OneLake - the foundation of Microsoft Fabric, OneDrive for data and the data silo killer!"](https://github.com/pawelpo/presentations/blob/master/20230830%20OneLake%20-%20the%20foundation%20of%20Microsoft%20Fabric/OneLake%20-%20the%20foundation%20of%20Microsoft%20Fabric%2C%20OneDrive%20for%20data%20and%20the%20data%20silo%20killer.pdf)
 * 2023-04-12 - DBAVUG (online), ["Azure Synapse Analytics and Power BI Datamarts - Better Toghether"](https://github.com/pawelpo/presentations/blob/master/20230412%20DBAVUG/Azure%20Synapse%20%2B%20Power%20BI%20Datamarts.pdf)
 * 2023-03-18 - SQLBits 2023 (Wales), ["Azure Data Explorer - a Torch in the Dungeon of Observational Analytics"](https://github.com/pawelpo/presentations/blob/master/20230318%20SQLBits%202023/Azure%20Data%20Explorer%20-%20a%20Torch%20in%20the%20Dungeon%20of%20Observational%20Analytics.pdf)
 * 2023-01-28 - Data Toboggan Winter Edition 2023 (online), ["What's New and Cool in Azure Synapse Analytics"](https://github.com/pawelpo/presentations/blob/master/20230128%20Data%20Toboggan%20Winter%20Edition%202023/Whats%20New%20and%20Cool%20in%20Azure%20Synapse%20Analytics%20-%20Winter%202023.pdf)
