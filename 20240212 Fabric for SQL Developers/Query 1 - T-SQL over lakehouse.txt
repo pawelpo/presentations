@@ -1,0 +1,26 @@
+SELECT * FROM sys.tables;
+GO
+
+SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'trip';
+GO
+
+-- Let's run some analytical query
+SELECT p.payment_type_name, SUM(t.passenger_count) AS Passengers, COUNT(*) AS Trips
+FROM dbo.payment_type AS p
+LEFT JOIN dbo.trip AS t
+ON p.payment_type_id = t.payment_type
+GROUP BY p.payment_type_name
+ORDER BY Passengers DESC;
+GO
+
+-- Create a view presenting aggregated data
+CREATE OR ALTER VIEW dbo.vTripAggregated
+AS
+SELECT p.payment_type_name, SUM(t.passenger_count) AS Passengers, COUNT(*) AS Trips
+FROM dbo.payment_type AS p
+LEFT JOIN dbo.trip AS t
+ON p.payment_type_id = t.payment_type
+GROUP BY p.payment_type_name;
+GO
+
+SELECT * FROM dbo.vTripAggregated ORDER BY Passengers DESC;
