@@ -1,0 +1,40 @@
+//***********************************************************************************************************
+// Here are two articles to help you get started with KQL:
+// KQL reference guide - https://aka.ms/KQLguide
+// SQL - KQL conversions - https://aka.ms/sqlcheatsheet
+//***********************************************************************************************************
+
+// Use 'take' to view a sample number of records in the table and check the data.
+StocksDaily
+| take 100
+
+// Filter and project data
+StocksDaily
+| where Ticker == 'MSFT'
+| project Date, Close
+
+// Convert SQL to KQL
+explain 
+select top(10) * from StocksDaily where Ticker = 'MSFT' order by [Close] desc
+
+StocksDaily
+| where (Ticker == "MSFT")
+| project Date, Open, High, Low, Close, AdjClose, Volume, Ticker
+| sort by Close desc nulls first
+| take int(10)
+
+// Sample complex KQL query with specialized scan function
+StocksDaily
+| where Ticker == "MSFT"
+| sort by Date asc
+| scan with_match_id=m_id declare (dateStart:date, currClose:real) with
+(
+    step incStart: 
+        true => dateStart = iff(isnull(incStart.dateStart), Date, incStart.dateStart), 
+        currClose = iif(isnull(incStart.currClose), AdjClose, AdjClose);
+    step incEnd output=none: AdjClose - incStart.currClose < 0;
+)
+| summarize Days = count(), StartDate = min(Date), EndDate = max(Date), 
+            MinAdjClose = min(AdjClose), MaxAdjClose = max(AdjClose) by m_id
+| project Days, StartDate, EndDate, MinAdjClose, MaxAdjClose
+| top 1 by Days
