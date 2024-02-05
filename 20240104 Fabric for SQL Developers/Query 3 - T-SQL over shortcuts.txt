@@ -13,3 +13,7 @@ SELECT FORMAT(COUNT_BIG(*), '#,#') FROM dbo.trip_large;
 GO
 
 -- Read about authorization for different shortcut types: https://learn.microsoft.com/en-us/fabric/onelake/onelake-shortcuts#types-of-shortcuts
+
+-- Query a shortcut to KQL Database
+SELECT TOP(10) * FROM dbo.StocksDaily WHERE Ticker = 'MSFT';
+GO
