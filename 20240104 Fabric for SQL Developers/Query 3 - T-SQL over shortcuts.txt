@@ -8,10 +8,8 @@ ORDER BY Passengers DESC;
 GO
 
 -- Query a shortcut to Lakehouse from another workspace
+-- https://app.fabric.microsoft.com/groups/d0d5b682-cac5-40eb-9b62-7b405a064445/lakehouses/b8f7fc1d-5f33-4fd1-9f7f-dff2c64ccfdd?experience=data-engineering
 SELECT FORMAT(COUNT_BIG(*), '#,#') FROM dbo.trip_large;
 GO
 
--- Query a shortcut to KQL Database
-SELECT TOP(10) * FROM dbo.StocksDaily WHERE Ticker = 'MSFT';
-GO
-
+-- Read about authorization for different shortcut types: https://learn.microsoft.com/en-us/fabric/onelake/onelake-shortcuts#types-of-shortcuts
