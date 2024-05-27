@@ -1,6 +1,7 @@
 # Presentations
 This repository contains resources created for my presentations at user groups and events.
 
+* 2024-05-31 - Data Point Prague (Prague, Czech Republic), [How to grow as a data professional in the era of AI](https://github.com/pawelpo/presentations/blob/master/20240531%20Data%20Point%20Prague/Data%20Point%20Prague%20Keynote.pdf)
 * 2024-04-18 - Data Community Poland (online), [Semantic Link in Microsoft Fabric](https://github.com/pawelpo/presentations/tree/master/20240418%20Semantic%20Link%20in%20Microsoft%20Fabric) 
 * 2023-01-04 - [multiple events], [Microsoft Fabric for SQL Developers](https://github.com/pawelpo/presentations/blob/master/20240104%20Fabric%20for%20SQL%20Developers/Fabric%20for%20SQL%20devs.pdf) ([demo files](https://github.com/pawelpo/presentations/tree/master/20240104%20Fabric%20for%20SQL%20Developers))
 * 2023-08-30 - Microsoft Fabric and Synapse Data Engineering Explorers - User Group Norway (online), ["OneLake - the foundation of Microsoft Fabric, OneDrive for data and the data silo killer!"](https://github.com/pawelpo/presentations/blob/master/20230830%20OneLake%20-%20the%20foundation%20of%20Microsoft%20Fabric/OneLake%20-%20the%20foundation%20of%20Microsoft%20Fabric%2C%20OneDrive%20for%20data%20and%20the%20data%20silo%20killer.pdf)
