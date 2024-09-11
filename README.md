@@ -1,6 +1,7 @@
 # Presentations
 This repository contains resources created for my presentations at user groups and events.
 
+* 2024-09-11 - Fabric Global Online Conference, [Semantic Link - Why Power BI developers can fall in love with notebooks](https://github.com/pawelpo/presentations/tree/master/20240911%20Fabric%20Global%20Online%20Conference)
 * 2024-05-31 - Data Point Prague (Prague, Czech Republic), [How to grow as a data professional in the era of AI](https://github.com/pawelpo/presentations/blob/master/20240531%20Data%20Point%20Prague/Data%20Point%20Prague%20Keynote.pdf)
 * 2024-04-18 - Data Community Poland (online), [Semantic Link in Microsoft Fabric](https://github.com/pawelpo/presentations/tree/master/20240418%20Semantic%20Link%20in%20Microsoft%20Fabric) 
 * 2023-01-04 - [multiple events], [Microsoft Fabric for SQL Developers](https://github.com/pawelpo/presentations/blob/master/20240104%20Fabric%20for%20SQL%20Developers/Fabric%20for%20SQL%20devs.pdf) ([demo files](https://github.com/pawelpo/presentations/tree/master/20240104%20Fabric%20for%20SQL%20Developers))
