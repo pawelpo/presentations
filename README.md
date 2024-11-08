@@ -1,6 +1,7 @@
 # Presentations
 This repository contains resources created for my presentations at user groups and events.
 
+* 2024-11-08 - Data Toboggan Alpine Coaster 2024 (online), [Pimp your data in Fabric using AI without F64](https://github.com/pawelpo/presentations/tree/master/20241108%20Pimp%20your%20data%20in%20Fabric%20using%20AI%20without%20F64)
 * 2024-10-19 - SQLDay Lite 2024 (Wroclaw, Poland), [How AI landed in the SQL world - meet Snowflake Cortex](https://github.com/pawelpo/presentations/tree/master/20241019%20How%20AI%20landed%20in%20the%20SQL%20world%20-%20meet%20Snowflake%20Cortex)
 * 2024-09-11 - Fabric Global Online Conference, [Semantic Link - Why Power BI developers can fall in love with notebooks](https://github.com/pawelpo/presentations/tree/master/20240911%20Fabric%20Global%20Online%20Conference)
 * 2024-05-31 - Data Point Prague (Prague, Czech Republic), [How to grow as a data professional in the era of AI](https://github.com/pawelpo/presentations/blob/master/20240531%20Data%20Point%20Prague/Data%20Point%20Prague%20Keynote.pdf)
