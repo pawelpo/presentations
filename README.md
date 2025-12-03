@@ -1,7 +1,7 @@
 # Presentations
 This repository contains resources created for my presentations at user groups and events.
 
-* 2025-12-10 - Microsoft Fabric & Power BI Türkiye User Group (online), [Microsoft Fabric meets MCP - what can we do with it?]()
+* 2025-12-10 - Microsoft Fabric & Power BI Türkiye User Group (online), [Microsoft Fabric meets MCP - what can we do with it?](https://github.com/pawelpo/presentations/blob/master/20251210%20Fabric%20Meeets%20MCP/Fabric%20meets%20MCP.pdf)
 * 2024-12-05 - Data Community Poland (Warsaw, Poland), [Microsoft Fabric Post-Ignite Demo Festival](https://github.com/pawelpo/presentations/blob/master/20241205%20Post-Ignite%20Fabric%20Festival/Microsoft%20Fabric%20Post-Ignite%20Demo%20Festival.pdf)
 * 2024-11-08 - Data Toboggan Alpine Coaster 2024 (online), [Pimp your data in Fabric using AI without F64](https://github.com/pawelpo/presentations/tree/master/20241108%20Pimp%20your%20data%20in%20Fabric%20using%20AI%20without%20F64)
 * 2024-10-19 - SQLDay Lite 2024 (Wroclaw, Poland), [How AI landed in the SQL world - meet Snowflake Cortex](https://github.com/pawelpo/presentations/tree/master/20241019%20How%20AI%20landed%20in%20the%20SQL%20world%20-%20meet%20Snowflake%20Cortex)
