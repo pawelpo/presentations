@@ -1,6 +1,7 @@
 # Presentations
 This repository contains resources created for my presentations at user groups and events.
 
+* 2026-04-16 - Toronto Professionals Community (online), [Microsoft Fabric meets MCP - what can we do with it](https://github.com/pawelpo/presentations/blob/master/20260416%20Fabric%20Meeets%20MCP/Fabric%20meets%20MCP.pdf)
 * 2025-12-13 - SQL Server 2025 Launch (Cracow, Poland), [SQL Server 2025 - What's New in Performance and Scalability](https://github.com/pawelpo/presentations/blob/master/20251213%20SQL%20Server%202025%20Launch/SQL%20Server%202025%20-%20perf%20and%20scale.pdf) | [demo files](https://github.com/pawelpo/presentations/tree/master/20251213%20SQL%20Server%202025%20Launch)
 * 2025-12-10 - Microsoft Fabric & Power BI Türkiye User Group (online), [Microsoft Fabric meets MCP - what can we do with it?](https://github.com/pawelpo/presentations/blob/master/20251210%20Fabric%20Meeets%20MCP/Fabric%20meets%20MCP.pdf)
 * 2024-12-05 - Data Community Poland (Warsaw, Poland), [Microsoft Fabric Post-Ignite Demo Festival](https://github.com/pawelpo/presentations/blob/master/20241205%20Post-Ignite%20Fabric%20Festival/Microsoft%20Fabric%20Post-Ignite%20Demo%20Festival.pdf)
