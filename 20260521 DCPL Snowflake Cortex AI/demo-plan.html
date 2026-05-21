@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snowflake Cortex AI Demo Hour</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-snap-type: y mandatory; overflow-y: scroll; scroll-behavior: smooth; }
+        body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; color: #1A2332; line-height: 1.6; }
+
+        .logo-fixed { height: 32px; }
+        .top-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: center; background: #fff; border-bottom: 1px solid #E4E8ED; box-shadow: 0 1px 4px rgba(0,0,0,0.04); padding: 0 24px; }
+        .top-nav .nav-brand { display: flex; align-items: center; gap: 14px; margin-right: auto; }
+        .top-nav .nav-brand span { font-weight: 700; color: #1B2A4A; font-size: 0.9em; }
+        .top-nav a { padding: 14px 24px; font-size: 0.85em; font-weight: 600; color: #5A6872; text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; transition: color 0.2s, border-color 0.2s; border-bottom: 2px solid transparent; }
+        .top-nav a:hover { color: #0D9DD9; }
+        .top-nav a.active { color: #0D9DD9; border-bottom-color: #0D9DD9; }
+
+        /* Slides */
+        .slide { min-height: 100vh; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; padding: 40px; position: relative; }
+        .slide-inner { max-width: 1000px; width: 100%; text-align: center; }
+
+        /* Cards grid */
+        .card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 30px; }
+        .card {
+            background: #F8FAFB;
+            border: 1px solid #E4E8ED;
+            border-radius: 14px;
+            padding: 28px 24px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            text-align: left;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(41,181,232,0.12); border-color: #29B5E8; }
+        .card h3 { color: #11567F; font-size: 1.1em; margin-bottom: 0; }
+
+        /* Fullscreen overlay */
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #FFFFFF;
+            z-index: 9000;
+            overflow-y: auto;
+            padding: 60px 40px;
+            animation: fadeIn 0.2s;
+        }
+        .fullscreen-overlay.active { display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .fullscreen-overlay img { max-width: 92vw; max-height: 85vh; border-radius: 10px; }
+        .fullscreen-overlay .fs-content { max-width: 900px; width: 100%; text-align: center; }
+        .fullscreen-overlay .fs-content h2 { color: #1B2A4A; font-size: 2em; margin-bottom: 12px; }
+        .fullscreen-overlay .fs-content p { color: #5A6872; font-size: 1.1em; margin-bottom: 20px; }
+        .fullscreen-overlay .fs-content ul { text-align: left; max-width: 600px; margin: 0 auto; color: #3A4A5A; font-size: 1em; }
+        .fullscreen-overlay .fs-content li { margin-bottom: 8px; }
+        .close-btn { position: fixed; top: 20px; right: 30px; z-index: 9999; font-size: 2em; color: #5A6872; cursor: pointer; line-height: 1; background: #fff; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #E4E8ED; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .close-btn:hover { color: #DE350B; border-color: #DE350B; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Title slide */
+        .title-main { font-size: 2.8em; color: #1B2A4A; font-weight: 700; margin-bottom: 8px; }
+        .title-main .hl { color: #0D9DD9; }
+        .title-sub { color: #5A6872; font-size: 1.15em; margin-bottom: 10px; }
+
+        /* Demo number badge */
+        .demo-num { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #29B5E8; color: #fff; font-weight: 700; font-size: 0.9em; margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            .slide { padding: 30px 16px; }
+            .title-main { font-size: 2em; }
+            .card-grid { grid-template-columns: 1fr; }
+            .fullscreen-overlay { padding: 40px 20px; }
+            .top-nav .nav-brand span { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav" id="topNav">
+        <div class="nav-brand">
+            <img src="dcpl.png" alt="Data Community Poland" class="logo-fixed">
+            <span>Snowflake Cortex AI Demo Hour</span>
+        </div>
+        <a href="#slide-title" data-section="slide-title">Intro</a>
+        <a href="#slide-arch" data-section="slide-arch">Snowflake</a>
+        <a href="#slide-demos" data-section="slide-demos">Demos</a>
+        <a href="#slide-start" data-section="slide-start">Get Started</a>
+    </nav>
+
+    <!-- SLIDE 1: Title -->
+    <section class="slide" id="slide-title">
+        <div class="slide-inner">
+            <h1 class="title-main">Snowflake <span class="hl">Cortex AI</span> Demo Hour</h1>
+            <p class="title-sub">AI Functions &bull; Multimodal &bull; Agents &bull; Snowflake Intelligence</p>
+            <p style="color:#888; font-size:0.9em; margin-top:6px;">Click any card below to view full screen. Press Escape or &times; to close.</p>
+            <div class="card-grid" style="margin-top:36px;">
+                <div class="card" data-fs="fs-expect">
+                    <h3>What to Expect</h3>
+                </div>
+                <div class="card" data-fs="fs-about">
+                    <h3>About the Speaker</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 2: Architecture Diagrams -->
+    <section class="slide" id="slide-arch">
+        <div class="slide-inner">
+            <h2 style="color:#1B2A4A; font-size:1.6em; margin-bottom:8px;">Snowflake AI Data Cloud</h2>
+            <p style="color:#5A6872; margin-bottom:16px;">Click a diagram to zoom in</p>
+            <div class="card-grid" style="grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                <div class="card" data-fs="fs-platform" style="padding:16px;">
+                    <img src="platform-diagram-feb26.webp" alt="Snowflake Platform" style="width:100%; border-radius:6px; margin-bottom:8px;">
+                    <h3 style="font-size:0.95em;">Snowflake Platform</h3>
+                </div>
+                <div class="card" data-fs="fs-cortex" style="padding:16px;">
+                    <img src="snowflake-cortex-ai.webp" alt="Cortex AI" style="width:100%; border-radius:6px; margin-bottom:8px;">
+                    <h3 style="font-size:0.95em;">Snowflake Cortex AI</h3>
+                </div>
+                <div class="card" data-fs="fs-ml" style="padding:16px;">
+                    <img src="snowflake-ml-diagram-feb-2026.webp" alt="Snowflake ML" style="width:100%; border-radius:6px; margin-bottom:8px;">
+                    <h3 style="font-size:0.95em;">Snowflake ML</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 3: Demos -->
+    <section class="slide" id="slide-demos">
+        <div class="slide-inner">
+            <h2 style="color:#1B2A4A; font-size:1.6em; margin-bottom:8px;">Live Demos</h2>
+            <p style="color:#5A6872; margin-bottom:24px;">Click a demo card for details</p>
+            <div class="card-grid">
+                <div class="card" data-fs="fs-demo1">
+                    <div class="demo-num">1</div>
+                    <div style="font-size:2.5em; margin-bottom:10px;">&#x1F4DD;</div>
+                    <h3>Cortex AI Functions &mdash; Unstructured Text</h3>
+                </div>
+                <div class="card" data-fs="fs-demo2">
+                    <div class="demo-num">2</div>
+                    <div style="font-size:2.5em; margin-bottom:10px;">&#x1F3A5;</div>
+                    <h3>Cortex AI Functions &mdash; Multimodal</h3>
+                </div>
+                <div class="card" data-fs="fs-demo3">
+                    <div class="demo-num">3</div>
+                    <div style="font-size:2.5em; margin-bottom:10px;">&#x1F916;</div>
+                    <h3>Cortex Agents + Snowflake Intelligence</h3>
+                </div>
+                <div class="card" data-fs="fs-demo4">
+                    <div class="demo-num">4</div>
+                    <div style="font-size:2.5em; margin-bottom:10px;">&#x1F4BB;</div>
+                    <h3>Cortex Code</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SLIDE 4: Get Started -->
+    <section class="slide" id="slide-start">
+        <div class="slide-inner">
+            <h2 style="color:#1B2A4A; font-size:1.6em; margin-bottom:8px;">Get Started</h2>
+            <p style="color:#5A6872; margin-bottom:24px;">Resources to continue your Cortex AI journey</p>
+            <ul style="text-align:left; max-width:700px; margin:0 auto; list-style:none; padding:0;">
+                <li style="margin-bottom:14px; padding:12px 18px; background:#F8FAFB; border:1px solid #E4E8ED; border-radius:10px;">
+                    <a href="https://signup.snowflake.com/" target="_blank" style="color:#0D9DD9; text-decoration:none; font-weight:600;">Snowflake Free Trial &mdash; Sign Up</a>
+                </li>
+                <li style="margin-bottom:14px; padding:12px 18px; background:#F8FAFB; border:1px solid #E4E8ED; border-radius:10px;">
+                    <a href="https://www.snowflake.com/en/developers/guides/getting-started-with-cortex-aisql/" target="_blank" style="color:#0D9DD9; text-decoration:none; font-weight:600;">Getting Started with Cortex AI &amp; SQL</a>
+                </li>
+                <li style="margin-bottom:14px; padding:12px 18px; background:#F8FAFB; border:1px solid #E4E8ED; border-radius:10px;">
+                    <a href="https://www.snowflake.com/en/developers/guides/getting-started-with-multimodal-analysis-on-snowflake-cortex/" target="_blank" style="color:#0D9DD9; text-decoration:none; font-weight:600;">Getting Started with Multimodal Analysis on Cortex</a>
+                </li>
+                <li style="margin-bottom:14px; padding:12px 18px; background:#F8FAFB; border:1px solid #E4E8ED; border-radius:10px;">
+                    <a href="https://www.snowflake.com/en/developers/guides/extracting-insights-from-multimodal-customer-service-data/" target="_blank" style="color:#0D9DD9; text-decoration:none; font-weight:600;">Extracting Insights from Multimodal Customer Service Data</a>
+                </li>
+                <li style="margin-bottom:14px; padding:12px 18px; background:#F8FAFB; border:1px solid #E4E8ED; border-radius:10px;">
+                    <a href="https://www.snowflake.com/en/developers/guides/getting-started-with-snowflake-intelligence/" target="_blank" style="color:#0D9DD9; text-decoration:none; font-weight:600;">Getting Started with Snowflake Intelligence</a>
+                </li>
+                <li style="margin-bottom:14px; padding:12px 18px; background:#F8FAFB; border:1px solid #E4E8ED; border-radius:10px;">
+                    <a href="https://www.snowflake.com/en/developers/guides/getting-started-with-cortex-agents/" target="_blank" style="color:#0D9DD9; text-decoration:none; font-weight:600;">Getting Started with Cortex Agents</a>
+                </li>
+                <li style="margin-bottom:14px; padding:12px 18px; background:#F8FAFB; border:1px solid #E4E8ED; border-radius:10px;">
+                    <a href="https://www.snowflake.com/en/developers/guides/cortex-code-foundations/" target="_blank" style="color:#0D9DD9; text-decoration:none; font-weight:600;">Cortex Code Foundations</a>
+                </li>
+                <li style="margin-bottom:14px; padding:12px 18px; background:#F8FAFB; border:1px solid #E4E8ED; border-radius:10px;">
+                    <a href="https://www.snowflake.com/en/developers/guides/getting-started-with-cortex-code-cli/" target="_blank" style="color:#0D9DD9; text-decoration:none; font-weight:600;">Getting Started with Cortex Code CLI</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ===== FULLSCREEN OVERLAYS ===== -->
+
+    <!-- Expectations -->
+    <div class="fullscreen-overlay" id="fs-expect">
+        <span class="close-btn">&times;</span>
+        <div class="fs-content">
+            <h2>What to Expect</h2>
+            <ul style="font-size:1.2em; line-height:2;">
+                <li><strong>Snowflake is not just a data warehouse</strong> &mdash; we'll prove it live</li>
+                <li><strong>Native AI layer</strong> &mdash; no data export, no separate infra, no external pipelines</li>
+                <li><strong>GenAI, Agentic AI, MCP</strong> &mdash; latest trends, hands-on demos</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- About -->
+    <div class="fullscreen-overlay" id="fs-about">
+        <span class="close-btn">&times;</span>
+        <img src="Pawel.png" alt="About Pawel" style="max-height:90vh;">
+    </div>
+
+    <!-- Platform -->
+    <div class="fullscreen-overlay" id="fs-platform">
+        <span class="close-btn">&times;</span>
+        <img src="platform-diagram-feb26.webp" alt="Snowflake Platform">
+    </div>
+
+    <!-- Cortex AI -->
+    <div class="fullscreen-overlay" id="fs-cortex">
+        <span class="close-btn">&times;</span>
+        <img src="snowflake-cortex-ai.webp" alt="Cortex AI">
+    </div>
+
+    <!-- ML -->
+    <div class="fullscreen-overlay" id="fs-ml">
+        <span class="close-btn">&times;</span>
+        <img src="snowflake-ml-diagram-feb-2026.webp" alt="Snowflake ML">
+    </div>
+
+    <!-- Demo 1 -->
+    <div class="fullscreen-overlay" id="fs-demo1">
+        <span class="close-btn">&times;</span>
+        <div class="fs-content">
+            <div class="demo-num" style="margin:0 auto 16px;">1</div>
+            <h2>Cortex AI Functions &mdash; Unstructured Text</h2>
+            <p>Built-in SQL functions that classify, summarize, translate, extract sentiment, and filter unstructured text &mdash; no model training, no infrastructure, just SQL.</p>
+            <ul>
+                <li><strong>AI_CLASSIFY</strong> &mdash; zero-shot categorization into any set of labels</li>
+                <li><strong>AI_SENTIMENT</strong> &mdash; detect tone and emotion across multi-language text</li>
+                <li><strong>AI_TRANSLATE</strong> &mdash; translate between 30+ languages with auto-detection</li>
+                <li><strong>AI_COMPLETE</strong> &mdash; generate text, summaries, rewrites with any supported LLM</li>
+                <li><strong>AI_FILTER / AI_AGG</strong> &mdash; semantic WHERE and GROUP BY in natural language</li>
+            </ul>
+            <h3 style="margin-top:24px; color:#11567F;">Sample Use Cases</h3>
+            <ul>
+                <li>Auto-tag support tickets by topic and urgency without training data</li>
+                <li>Summarize thousands of customer reviews into actionable themes</li>
+                <li>Filter regulatory filings for ESG-related disclosures using plain English</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Demo 2 -->
+    <div class="fullscreen-overlay" id="fs-demo2">
+        <span class="close-btn">&times;</span>
+        <div class="fs-content">
+            <div class="demo-num" style="margin:0 auto 16px;">2</div>
+            <h2>Cortex AI Functions &mdash; Multimodal</h2>
+            <p>Process audio, images, video, and documents directly in SQL. No external pipelines, no pre-processing &mdash; pass files from stages to AI functions and get structured results.</p>
+            <ul>
+                <li><strong>AI_TRANSCRIBE</strong> &mdash; speech-to-text with speaker diarization (31 languages)</li>
+                <li><strong>AI_COMPLETE + TO_FILE()</strong> &mdash; analyze images, video, and documents with any LLM</li>
+                <li><strong>AI_PARSE_DOCUMENT</strong> &mdash; extract structured text from PDFs, scans, forms</li>
+                <li><strong>AI_FILTER on images</strong> &mdash; semantic image filtering with natural language</li>
+                <li><strong>Structured output</strong> &mdash; response_format =&gt; TYPE OBJECT(...) for JSON schema enforcement</li>
+            </ul>
+            <h3 style="margin-top:24px; color:#11567F;">Sample Use Cases</h3>
+            <ul>
+                <li>Transcribe and analyze call recordings to detect fraud patterns</li>
+                <li>Extract product information from marketing videos for cataloging</li>
+                <li>Parse invoices and contracts into structured database rows</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Demo 3 -->
+    <div class="fullscreen-overlay" id="fs-demo3">
+        <span class="close-btn">&times;</span>
+        <div class="fs-content">
+            <div class="demo-num" style="margin:0 auto 16px;">3</div>
+            <h2>Cortex Agents + Snowflake Intelligence</h2>
+            <p>Build autonomous AI agents that reason, select tools, execute actions, and reflect on results. Expose the same capabilities to business users through a no-code conversational interface.</p>
+            <ul>
+                <li><strong>Cortex Analyst</strong> &mdash; natural language to SQL via Semantic Views</li>
+                <li><strong>Cortex Search</strong> &mdash; RAG over unstructured documents</li>
+                <li><strong>Custom Tools</strong> &mdash; stored procedures for real-world actions (email, APIs, workflows)</li>
+                <li><strong>CREATE AGENT</strong> &mdash; combine tools with instructions and guardrails</li>
+                <li><strong>Snowflake Intelligence</strong> &mdash; no-code UI with charts, artifacts, and verified answers</li>
+            </ul>
+            <h3 style="margin-top:24px; color:#11567F;">Sample Use Cases</h3>
+            <ul>
+                <li>Self-service analytics bot that answers business questions and sends scheduled reports</li>
+                <li>IT help desk agent that searches knowledge base and creates tickets automatically</li>
+                <li>Compliance agent that cross-references policy documents with operational data</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Demo 4 -->
+    <div class="fullscreen-overlay" id="fs-demo4">
+        <span class="close-btn">&times;</span>
+        <div class="fs-content">
+            <div class="demo-num" style="margin:0 auto 16px;">4</div>
+            <h2>Cortex Code</h2>
+            <p>AI-powered coding assistant available both inside Snowsight (worksheets &amp; notebooks) and as a standalone CLI for local development. Understands your schema, writes SQL, manages objects, and deploys code.</p>
+            <ul>
+                <li><strong>Snowsight integration</strong> &mdash; inline AI in SQL worksheets and Python notebooks</li>
+                <li><strong>CLI (CoCo)</strong> &mdash; terminal agent that reads, writes, edits files and runs commands</li>
+                <li><strong>Schema-aware</strong> &mdash; auto-discovers databases, tables, views, stages</li>
+                <li><strong>Multi-tool</strong> &mdash; executes SQL, bash, file operations, web fetch in one conversation</li>
+                <li><strong>Extensible</strong> &mdash; hooks, MCP servers, custom skills, team mode</li>
+            </ul>
+            <h3 style="margin-top:24px; color:#11567F;">Sample Use Cases</h3>
+            <ul>
+                <li>Generate and debug complex SQL queries from natural language descriptions</li>
+                <li>Scaffold dbt models, Streamlit apps, or stored procedures from scratch</li>
+                <li>Explore unfamiliar databases and generate documentation automatically</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Card click -> fullscreen
+        document.querySelectorAll('.card[data-fs]').forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.getAttribute('data-fs');
+                document.getElementById(id).classList.add('active');
+            });
+        });
+
+        // Close buttons
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.addEventListener('click', () => btn.parentElement.classList.remove('active'));
+        });
+
+        // Escape key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.fullscreen-overlay.active').forEach(o => o.classList.remove('active'));
+            }
+        });
+
+        // Top nav active state on scroll
+        const slides = document.querySelectorAll('.slide');
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const sectionId = e.target.id;
+                    document.querySelectorAll('.top-nav a').forEach(a => a.classList.toggle('active', a.getAttribute('data-section') === sectionId));
+                }
+            });
+        }, { threshold: 0.5 });
+        slides.forEach(s => obs.observe(s));
+    </script>
+</body>
+</html>
